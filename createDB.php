@@ -1,0 +1,185 @@
+<!--
+	Shaun Mueller
+	13171256
+	15-09-2017
+-->
+
+<?php
+	$connection = mysqli_connect('localhost', 'root', '');		
+	if (!$connection) {
+		die("Could not connect: " . mysqli_connect_error());
+	}
+	if(!mysqli_select_db($connection,'ShaunM_CSTools')){
+		$sql = "CREATE DATABASE ShaunM_CSTools";	
+		mysqli_query($connection,$sql);
+		$connection = mysqli_connect('localhost','root','','ShaunM_CSTools');
+		$sql =	"CREATE TABLE Customer(
+					CustomerID			INT NOT NULL AUTO_INCREMENT,
+					CustomerFirstName	CHAR (30), 
+					CustomerSurname 	CHAR (30),
+					StreetAddress 		CHAR (100),
+					City 				CHAR (30),
+					State 				CHAR (30),
+					Zip 				INT,
+					Balance 			FLOAT,
+					CreditLimit 		FLOAT,
+					PRIMARY KEY(CustomerID)
+				);
+				CREATE TABLE Orders(
+					OrderNum 			INT NOT NULL AUTO_INCREMENT,
+					OrderDate 			DATE, 
+					CustomerID 			INT NOT NULL, 
+					NumberOrdered 		INT,
+					QuotedPrice 		FLOAT,
+					PartNum 			INT NOT NULL,
+					PRIMARY KEY(OrderNum),
+					FOREIGN KEY(CustomerID) REFERENCES Customer(CustomerID),
+					FOREIGN KEY(PartNum) REFERENCES Part(PartNum)
+				);
+				ALTER TABLE Orders AUTO_INCREMENT=8000; 
+				CREATE TABLE Part(
+					PartNum 			INT NOT NULL AUTO_INCREMENT,
+					PartName			CHAR (100),
+					Description 		CHAR (200),
+					Specs 				CHAR (200),
+					OnHand 				INT,
+					Category 			CHAR (50),
+					Warehouse 			CHAR (50),
+					ListPrice 			FLOAT,
+					PRIMARY KEY(PartNum)
+				);
+				ALTER TABLE Part AUTO_INCREMENT=600;
+				INSERT INTO Customer (CustomerFirstName, CustomerSurName, StreetAddress, City, State, Zip, Balance, CreditLimit)
+				VALUES 	('Fred','Bear','3 Right St','Geelong','VIC',3211,350,1000),
+						('Jill','Smith','44 Nine st','Malvern','VIC',3456,45.95,1000),
+						('Joseph','Jones','55 Main Road','Highton','VIC',3221,0,1000),
+						('Hayden','Brown','62 Fenwick St','Geelong','VIC',3211,750,1000),
+						('Jayesh','Green','33 Boundary Rd','Port Melbourne','VIC',3034,0,1000),
+						('Malcom','White','21 Beach Rd','Port Melbourne','VIC',3034,359,1000),
+						('Tan','Nguyen','22 Beach Rd','South Melbourne','VIC',3034,299,1000),
+						('Lien','Tan','34 Main Rd','Belmont','VIC',3221,1500,2000),
+						('Adolf','Smyth','2 Mercer St','Geelong','VIC',3211,0,2000),
+						('Ali','Baba','4 High St','Armidale','NSW',3023,200,2000),
+						('Salim','Baba','5 Parker St','Belmore','NSW',2034,100,2000),
+						('Leena','Jones','56 Elms Blvd','Carlton','NSW',2134,450,2000),
+						('Julie','Johnson','567 Spring St','Fitzroy','VIC',3322,220,2000),
+						('Emma','Tate','2 Autumn Rd','Geelong','VIC',3211,0,2000),
+						('Anna','Fisher','3 Summer St','Ballarat','VIC',3456,555,2000),
+						('Jane','Dorkins','6 Winter Lane','Ballarat','VIC',3456,660,2000),
+						('James','Green','77 John St','Bendigo','VIC',3544,750,2000),
+						('Jack','Stevens','33 Jane St','Castlemaine','VIC',3566,125,5000),
+						('John','Barber','66 Inez Av','Heatherdale','VIC',3124,2300,5000),
+						('Kevin','Builder','44 Maurice Av','Mitcham','VIC',3125,2400,5000),
+						('Robert','Jones','49 Heywood St','Hawthorn','VIC',3128,0,5000),
+						('Sally','Watts','2 Arlington St','Richmond','VIC',3133,3500,5000),
+						('Enya','Amps','9 Baker St','Beechworth','VIC',3567,0,5000),
+						('Brooke','Shields','88 Break Rd','Bright','VIC',3588,1200,5000),
+						('Naomi','Simpson','66 Station St','Tamworth','VIC',2211,0,5000),
+						('Peter','Ridge','9 Bridge Rd','Richmond','VIC',3133,1220,5000),
+						('Joshua','Adams','5 Swan St','Richmond','VIC',3133,200,5000),
+						('Jacob','Green','55 Johnson St','Mitcham','VIC',3122,300,5000),
+						('Thomas','Eddison','9 Victoria St','Abbotsford','VIC',3155,0,5000),
+						('Andrew','Rant','77 Albert St','Melbourne','VIC',3100,120,5000),
+						('Anthony','Rent','9 Elizabeth St','Melbourne','VIC',3100,100,5000),
+						('Natalie','Roberts','5 King St','Melbourne','VIC',3100,100,5000),
+						('Charmaine','Biggs','9 King St','Melbourne','VIC',3100,100,5000),
+						('Rose','Ratchet','4 Queen St','Melbourne','VIC',3100,0,5000),
+						('Janet','Rent','88 Moorabool St','Geelong','VIC',3211,200,5000),
+						('Jim','Jones','99 Mercer St','Geelong','VIC',3211,200,5000),
+						('Sam','Martin','3 Brougham st','Geelong','VIC',3211,200,4000),
+						('Ben','Miller','5 Geelong Rd','Torquay','VIC',3228,200,4000),
+						('Tim','Farmer','6 City Rd','Highton','VIC',3221,200,4000),
+						('Terese','Burns','7 Thames St','Brighton','VIC',3028,0,4000);
+				INSERT INTO Orders (OrderDate, CustomerID, NumberOrdered, PartNum, QuotedPrice)
+				VALUES	('2015-01-11', 1, 1, 601, 3.65),
+						('2015-01-25', 5, 1, 628, 120.56),
+						('2015-01-26', 9, 1, 617, 100.00),
+						('2015-02-12', 40, 2, 600, 10.00),
+						('2015-04-15', 24, 1, 618, 10.55),
+						('2015-05-20', 25, 1, 636, 34.45),
+						('2015-06-04', 27, 2, 637, 68.90),
+						('2015-09-12', 39, 3, 602, 10.50),
+						('2015-09-14', 32, 1, 632, 34.45),
+						('2015-10-06', 11, 1, 636, 34.45),
+						('2015-11-19', 27, 1, 626, 70.99),
+						('2015-12-22', 33, 2, 625, 300.90),
+						('2015-12-29', 1, 2, 637, 60.90),
+						('2016-01-10', 39, 3, 620, 13.35),
+						('2016-01-29', 24, 2, 613, 704.90),
+						('2016-03-08', 3, 1, 638, 34.45),
+						('2016-04-26', 17, 1, 637, 34.45),
+						('2016-05-09', 21, 2, 601, 7.30),
+						('2016-05-11', 1, 2, 617, 200.00),
+						('2016-06-04', 29, 1, 622, 99.99),
+						('2016-06-20', 32, 2, 620, 8.90),
+						('2016-07-06', 32, 1, 604, 50.00),
+						('2016-07-15', 20, 3, 633, 103.35),
+						('2016-08-30', 5, 2, 618, 21.10),
+						('2016-09-22', 18, 2, 601, 7.30),
+						('2016-10-30', 7, 2, 605, 60.00),
+						('2016-11-15', 22, 1, 606, 50.00),
+						('2016-11-28', 38, 1, 636, 34.45),
+						('2016-12-29', 8, 1, 644, 700.00),
+						('2016-12-11', 10, 1, 631, 34.45),
+						('2017-01-02', 10, 1, 641, 1000.00),
+						('2017-02-05', 35, 2, 627, 401.68),
+						('2017-02-14', 38, 1, 615, 344.45),
+						('2017-02-28', 29, 4, 605, 120.00),
+						('2017-03-18', 37, 3, 604, 150.00),
+						('2017-03-21', 39, 2, 603, 8.90),
+						('2017-04-19', 20, 2, 641, 2000.00),
+						('2017-05-04', 20, 2, 612, 401.00),
+						('2017-05-11', 25, 1, 631, 34.45),
+						('2017-06-13', 30, 1, 604, 50.00),
+						('2017-08-18', 6, 2, 611, 430.95);
+				INSERT INTO Part (PartName, Description, Specs, OnHand, Category, Warehouse, ListPrice)
+				VALUES 	('Generic HDMI Cable', '1M HDMI Cable', '1M', 8, 'Cables', 'Frankston', 5.00),
+						('Generic DVI Cable', '1M DVI Cable', '1M', 20, 'Cables', 'Melbourne', 3.65),
+						('Generic VGA Cable', '1M VGA Cable', '1M', 3, 'Cables', 'Frankston', 3.50),
+						('Generic USB Extension Cable', '2M USB Extension Cable', '2M', 2, 'Cables', 'Melbourne', 4.45),
+						('Generic Case - Blue', 'Generic Case in Blue Colour', 'ATX, Blue', 8, 'Cases', 'Frankston', 50.00),
+						('Generic Case - White', 'Generic Case in White Colour', 'ATX, White', 7, 'Cases', 'Melbourne', 30.00),
+						('Generic Case - Black', 'Generic Case in Black Colour', 'ATX, Black', 4, 'Cases', 'Melbourne', 50.00),
+						('Antec Eleven Case', 'Antec ATX Case in Black', 'ATX, Black', 1, 'Cases', 'Frankston', 99.99),
+						('AMD E233 CPU', 'AMDs base model CPU', '2.5GHz, 2MB Cache', 2, 'CPUs', 'Melbourne', 99.99),
+						('AMD F654 CPU', 'AMDs top line model CPU', '3GHz, 3MB Cache', 20, 'CPUs', 'Melbourne', 375.65),
+						('Intel 23E3 CPU', 'Intels base model CPU', '2.5GHz, 2MB Cache', 7, 'CPUs', 'Frankston', 99.99),
+						('Intel 87GG CPU', 'Intels top line model CPU', '3GHz, 3MB Cache', 5, 'CPUs', 'Frankston', 430.95),
+						('ATI G35 GPU', 'ATIs mid-range model GPU', '700MHz, 2GB', 12, 'GPUs', 'Melbourne', 200.50),
+						('ATI G55 GPU', 'ATIs top line model GPU', '1058MHz, 3GB', 6, 'GPUs', 'Melbourne', 352.45),
+						('Nvidia 56T GPU', 'Nvidias mid-range model GPU', '700MHz, 2GB', 8, 'GPUs', 'Melbourne', 200.50),
+						('Nvidia 96T GPU', 'Nvidias top line model GPU', '1058MHz, 3GB', 22, 'GPUs', 'Melbourne', 344.45),
+						('Generic Hard Drive', '1TB Hard Drive', '1TB', 23, 'HDDs', 'Melbourne', 90.45),
+						('Generic Solid State Drive', '250GB Solid State Drive', '250GB', 7, 'HDDs', 'Frankston', 100.00),
+						('Generic Keyboard', 'Normal Keyboard', '104 Keys', 3, 'Keyboards', 'Frankston', 10.55),
+						('Generic Mechanical Keyboard', 'Mechanical Keyboard', '104 Keys', 6, 'Keyboards', 'Frankston', 60.95),
+						('Generic Mouse', 'Standard Mouse', '3 Buttons', 7, 'Mice', 'Frankston', 4.45),
+						('Generic Gaming Mouse', 'Gaming Mouse with extra buttons', '7 Buttons, 32-bit CPU', 9, 'Mice', 'Melbourne', 54.45),
+						('Generic Monitor', 'Standard Monitor', '1366x768, DVI, VGA', 7, 'Monitors', 'Melbourne', 99.99),
+						('BenQ Monitor', 'BenQ brand Monitor', '1920x1080, HDMI, DVI', 23, 'Monitors', 'Melbourne', 300.20),
+						('LG Monitor', 'LG brand Monitor', '1920x1080, HDMI, DVI', 5, 'Monitors', 'Melbourne', 340.54),
+						('Gigabyte Motherboard', 'Gigabyte brand Motherboard', 'LGA1150, 4xDDR3', 65, 'Motherboards', 'Frankston', 150.45),
+						('ASRock Motherboard', 'ASRock brand Motherboard', 'LGA1150, 4xDDR3', 7, 'Motherboards', 'Frankston', 70.99),
+						('ASUS Motherboard', 'ASUS brand Motherboard', 'LGA1150, 4xDDR3', 5, 'Motherboards', 'Melbourne', 200.84),
+						('MSI Motherboard', 'MSI brand Motherboard', 'LGA1150, 4xDDR3', 5, 'Motherboards', 'Frankston', 120.56),
+						('Generic Basic PSU', 'Standard PSU', '500W', 5, 'PSUs', 'Melbourne', 34.45),
+						('Generic Gaming PSU', 'Gaming PSU', '1050W', 5, 'PSUs', 'Melbourne', 34.45),
+						('Antec PSU', 'Antec brand PSU', '1050W', 2, 'PSUs', 'Frankston', 34.45),
+						('Aerocool PSU', 'Aerocool brand PSU', '1050W', 8, 'PSUs', 'Frankston', 34.45),
+						('CoolerMaster PSU', 'Coolermaster brand PSU', '1050W', 5, 'PSUs', 'Melbourne', 34.45),
+						('Generic RAM 1GB', 'Standard 1GB RAM stick', '1GB', 7, 'RAM', 'Melbourne', 34.45),
+						('Generic RAM 2GB', 'Standard 2GB RAM stick', '2GB', 24, 'RAM', 'Frankston', 34.45),
+						('Generic RAM 4GB', 'Standard 4GB RAM stick', '4GB', 34, 'RAM', 'Frankston', 34.45),
+						('Generic Gaming RAM 1GB', 'Gaming grade 1GB RAM stick', '1GB', 34, 'RAM', 'Melbourne', 34.45),
+						('Generic Gaming RAM 2GB', 'Gaming grade 2GB RAM stick', '2GB', 43, 'RAM', 'Melbourne', 34.45),
+						('Generic Gaming RAM 4GB', 'Gaming grade 4GB RAM stick', '4GB', 34, 'RAM', 'Frankston', 34.45),
+						('PC Package 1', 'Basic Office PC', '2GB RAM, 250GB HDD, 2.5Ghz Dual Core', 4, 'PC Package', 'Frankston', 500.00),
+						('PC Package 2', 'Basic Gaming PC', '4GB RAM, 500GB HDD, 2.5Ghz Quad Core', 8, 'PC Package', 'Frankston', 1000.00),
+						('PC Package 3', 'Ultra Gaming PC', '16GB RAM, 1TB HDD, 320GB SSD, 3.5Ghz Octa Core', 3, 'PC Package', 'Frankston', 3000.00),
+						('Networking Package 1', 'Basic Networking, Router', 'Modem, 24-port Ethernet Switch', 7, 'Networking Package', 'Melbourne', 500.00),
+						('Networking Package 2', 'Basic Wireless Networking, Wireless Router', 'Modem, 24-port Ethernet Switch', 7, 'Networking Package', 'Melbourne', 700.00),
+						('Networking Package 3', 'Wireless AC Networking, AC Wireless Router', 'Modem, 24-port Ethernet Switch', 7, 'Networking Package', 'Melbourne', 1000.00)";
+		mysqli_multi_query($connection, $sql);
+	}
+	mysqli_close($connection);
+?>
